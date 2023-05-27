@@ -36,16 +36,47 @@ class App extends Component {
     return filteredList;
   };
 
+  onLikeToggle = (id) => {
+    const { simpsons } = this.props;
+    const indexOf = simpsons.findIndex((char) => {
+      return char.id === id;
+    });
+    // simpsons = [...this.state.simpsons];
+    //invert if liked or not liked
+    simpsons[indexOf].liked = !simpsons[indexOf].liked;
+    this.setState({ simpsons });
+  };
+
+  onDelete = (id) => {
+    const { simpsons } = this.props;
+    const indexOf = simpsons.findIndex((char) => {
+      return char.id === id;
+    });
+    simpsons.splice(indexOf, 1);
+    this.setState({ simpsons });
+  };
+
   render() {
+    const { simpsons } = this.props;
+    //calculate the total
+    let total = 0;
+    simpsons.forEach((char) => {
+      if (char.liked) total++;
+    });
     return (
-      <Simpsons
-        simpsons={this.getFilteredList()}
-        onDelete={this.onDelete}
-        onLikeToggle={this.onLikeToggle}
-        onSearchInput={this.onSearchInput}
-        onSortInput={this.onSortInput}
-        onReset={this.onReset}
-      />
+      <>
+        <div className="headerContainer">
+          <h1>Total no of liked chars #{total}</h1>
+        </div>
+        <Simpsons
+          simpsons={this.getFilteredList()}
+          onDelete={this.onDelete}
+          onLikeToggle={this.onLikeToggle}
+          onSearchInput={this.onSearchInput}
+          onSortInput={this.onSortInput}
+          onReset={this.onReset}
+        />
+      </>
     );
   }
 }
@@ -57,6 +88,8 @@ function mapStateToProps(state) {
     searchInput: state.searchInput,
     sortInput: state.sortInput,
     resetClick: state.resetClick,
+    // likeToggle: state.likeToggle,
+    // delete: state.delete,
   };
 }
 

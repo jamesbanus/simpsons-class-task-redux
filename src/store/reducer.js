@@ -4,6 +4,8 @@ import {
   SET_SEARCH_INPUT,
   SET_SORT_INPUT,
   SET_RESET,
+  // SET_LIKE_TOGGLE,
+  // SET_DELETE,
 } from "./types";
 
 export function reducer(state = initialState, action) {
@@ -19,6 +21,12 @@ export function reducer(state = initialState, action) {
 
     case SET_RESET:
       return { ...state, resetClick: action.payload };
+
+    // case SET_LIKE_TOGGLE:
+    //   return { ...state, likeToggle: action.payload };
+
+    // case SET_DELETE:
+    //   return { ...state, delete: action.payload };
 
     default:
       console.log("Reducer started or INVALID reducer type, probably a typo");

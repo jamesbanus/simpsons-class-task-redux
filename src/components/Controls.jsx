@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { SET_SEARCH_INPUT, SET_SORT_INPUT, SET_RESET } from "../store/types";
+import {
+  SET_SEARCH_INPUT,
+  SET_SORT_INPUT,
+  // SET_LIKE_TOGGLE,
+  // SET_DELETE,
+} from "../store/types";
 
 class Controls extends Component {
   // state = {  }
@@ -19,6 +24,25 @@ class Controls extends Component {
     document.getElementById("characterSearch").value = "";
     document.getElementById("characterSort").value = "";
   };
+
+  // onLikeToggle = (id) => {
+  //   const indexOf = this.state.simpsons.findIndex((char) => {
+  //     return char.id === id;
+  //   });
+  //   const simpsons = [...this.state.simpsons];
+  //   //invert if liked or not liked
+  //   simpsons[indexOf].liked = !simpsons[indexOf].liked;
+  //   this.setState({ simpsons });
+  // };
+
+  // onDelete = (id) => {
+  //   const indexOf = this.props.simpsons.findIndex((char) => {
+  //     return char.id === id;
+  //   });
+  //   const simpsons = [...this.props.simpsons];
+  //   simpsons.splice(indexOf, 1);
+  //   this.setState({ simpsons });
+  // };
 
   render() {
     return (
