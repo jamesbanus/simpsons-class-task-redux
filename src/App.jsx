@@ -3,13 +3,14 @@ import axios from "axios";
 import Loading from "./components/Loading";
 import Simpsons from "./components/Simpsons";
 import "./App.css";
+import { connect } from "react-redux";
+import { NEW_API_DATA } from "./store/types";
+import Interface from "./components/Interface";
 
 class App extends Component {
-  state = {};
-  initialState;
   async componentDidMount() {
     const { data } = await axios.get(
-      `https://thesimpsonsquoteapi.glitch.me/quotes?count=50`
+      `https://thesimpsonsquoteapi.glitch.me/quotes?count=${this.props.number}`
     );
 
     //fixed the api data to have unique id
@@ -17,7 +18,7 @@ class App extends Component {
       element.id = index + Math.random();
     });
 
-    this.setState({ simpsons: data });
+    this.props.dispatch({ type: NEW_API_DATA, payload: data });
   }
 
   onLikeToggle = (id) => {
@@ -39,59 +40,10 @@ class App extends Component {
     this.setState({ simpsons });
   };
 
-  onSearchInput = (e) => {
-    this.setState({ searchInput: e.target.value });
-  };
-
-  onSortInput = (e) => {
-    this.setState({ sortInput: e.target.value });
-  };
-
-  onReset = () => {
-    this.setState({ sortInput: "", searchInput: "" });
-    document.getElementById("characterSearch").value = "";
-    document.getElementById("characterSort").value = "";
-  };
-
-  // calculate data to display
-
-  getFilteredList = () => {
-    const { simpsons, searchInput, sortInput } = this.state;
-
-    // let { reset } = this.state;
-
-    let filteredList = [...simpsons];
-
-    // filter by search
-    if (searchInput) {
-      filteredList = filteredList.filter((item) => {
-        if (item.character.toLowerCase().includes(searchInput.toLowerCase())) {
-          return true;
-        }
-      });
-    }
-
-    // sort by alphabetical
-    if (sortInput == "Asc") {
-      filteredList.sort((itemOne, itemTwo) => {
-        if (itemOne.character > itemTwo.character) return 1;
-        if (itemOne.character < itemTwo.character) return -1;
-      });
-    } else if (sortInput === "Desc") {
-      filteredList.sort((itemOne, itemTwo) => {
-        if (itemOne.character > itemTwo.character) return -1;
-        if (itemOne.character < itemTwo.character) return 1;
-      });
-    }
-
-    // return result of search and sort
-    return filteredList;
-  };
-
   render() {
     console.log(this.state);
 
-    const { simpsons } = this.state;
+    const { simpsons } = this.props;
 
     if (!simpsons) return <Loading />;
 
@@ -108,17 +60,17 @@ class App extends Component {
         <div className="headerContainer">
           <h1>Total no of liked chars #{total}</h1>
         </div>
-        <Simpsons
-          simpsons={this.getFilteredList()}
-          onDelete={this.onDelete}
-          onLikeToggle={this.onLikeToggle}
-          onSearchInput={this.onSearchInput}
-          onSortInput={this.onSortInput}
-          onReset={this.onReset}
-        />
+        <Interface />
       </>
     );
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    simpsons: state.simpsons,
+    number: state.number,
+  };
+}
+
+export default connect(mapStateToProps)(App);

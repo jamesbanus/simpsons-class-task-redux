@@ -1,31 +1,47 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { SET_SEARCH_INPUT, SET_SORT_INPUT, SET_RESET } from "../store/types";
 
 class Controls extends Component {
   // state = {  }
-  render() {
-    const { onSearchInput, onSortInput, onReset } = this.props;
 
+  onSearchInput = (e) => {
+    this.props.dispatch({ type: SET_SEARCH_INPUT, payload: e.target.value });
+  };
+
+  onSortInput = (e) => {
+    this.props.dispatch({ type: SET_SORT_INPUT, payload: e.target.value });
+  };
+
+  onReset = () => {
+    this.props.dispatch({ type: SET_SEARCH_INPUT, payload: "" });
+    this.props.dispatch({ type: SET_SORT_INPUT, payload: "" });
+    document.getElementById("characterSearch").value = "";
+    document.getElementById("characterSort").value = "";
+  };
+
+  render() {
     return (
       <>
         <div className="filterContainer">
           <label htmlFor="character">Search by Character!</label>
           <input
-            onInput={onSearchInput}
+            onInput={this.onSearchInput}
             type="text"
             name="character"
             id="characterSearch"
           />
           <label htmlFor="alphabet">Sort by alphabetical order!</label>
-          <select onInput={onSortInput} name="alphabet" id="characterSort">
+          <select onInput={this.onSortInput} name="alphabet" id="characterSort">
             <option value=""></option>
             <option value="Asc">Asc</option>
             <option value="Desc">Desc</option>
           </select>
-          <button onClick={onReset}>Reset!</button>
+          <button onClick={this.onReset}>Reset!</button>
         </div>
       </>
     );
   }
 }
 
-export default Controls;
+export default connect()(Controls);
